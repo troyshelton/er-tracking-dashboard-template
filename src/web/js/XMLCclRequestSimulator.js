@@ -35,7 +35,7 @@
                     }
                     reject(error);
                 }
-            }, 200); // Simple 200ms delay
+            }, 800); // 800ms delay to see loading messages during testing
         });
     };
     
