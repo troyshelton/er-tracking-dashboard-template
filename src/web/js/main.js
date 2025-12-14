@@ -3325,7 +3325,7 @@
 
                 initializePatientTable(filteredData);
             } else {
-                showMessage('No patients found for selected list');
+                showTableMessage('No patients found for selected list');
             }
         } catch (error) {
             // Suppress Firebug Lite strict mode inspection errors for end users
@@ -3340,11 +3340,11 @@
                     }
                 } catch (retryError) {
                     debugLog('Error on retry: ' + retryError.message, 'error');
-                    showMessage('Error loading patient data: ' + retryError.message);
+                    showTableMessage('Error loading patient data. Please try again.');
                 }
             } else {
                 debugLog('Error loading patient data: ' + error.message, 'error');
-                showMessage('Error loading patient data: ' + error.message);
+                showTableMessage('Error loading patient data. Please try again.');
             }
         } finally {
             // Always stop refresh animation, even on error
