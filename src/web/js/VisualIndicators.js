@@ -107,42 +107,37 @@
             backgroundColor = '#ff8c00'; // Orange
             borderColor = '#ff8c00';
         }
-        
-        if (message) {
-            // Create unified indicator as badge (top-right corner)
-            const indicator = document.createElement('div');
-            indicator.id = 'unified-mode-indicator';
-            indicator.innerHTML = message;
-            indicator.style.cssText = [
-                'position: fixed',
-                'top: 10px',
-                'right: 10px',
-                'background: ' + backgroundColor,
-                'color: #ffffff',
-                'text-align: center',
-                'padding: 6px 12px',
-                'font-weight: bold',
-                'font-family: monospace',
-                'font-size: 11px',
-                'z-index: 999999',
-                'box-shadow: 0 2px 8px rgba(0,0,0,0.5)',
-                'border-radius: 4px',
-                'border: 2px solid ' + borderColor
-            ].join(';');
 
-            document.body.appendChild(indicator);
+        // Use header badge instead of fixed position indicator
+        const badge = document.getElementById('mode-indicator-badge');
+
+        if (message && badge) {
+            // Display badge in header
+            badge.innerHTML = message;
+            badge.style.backgroundColor = backgroundColor;
+            badge.style.color = '#ffffff';
+            badge.style.border = `1px solid ${borderColor}`;
+            badge.style.display = 'inline-block';
             
             // Add colored border to header for additional visibility
             const header = document.getElementById('header');
             if (header) {
-                header.style.borderTop = `4px solid ${borderColor}`;
-                header.style.borderBottom = `2px solid ${borderColor}`;
-                if (impersonateId && !isSimulator) {
-                    header.style.borderLeft = `6px solid ${borderColor}`;
-                }
+                header.style.borderTop = `3px solid ${borderColor}`;
             }
-            
+
             console.log(`[VisualIndicators] Unified indicator displayed: ${message}`);
+        } else if (badge) {
+            // Clear badge if no message
+            badge.innerHTML = '';
+            badge.style.display = 'none';
+
+            // Reset header border
+            const header = document.getElementById('header');
+            if (header) {
+                header.style.borderTop = '';
+            }
+
+            console.log('[VisualIndicators] All visual indicators cleared');
         }
     }
     
