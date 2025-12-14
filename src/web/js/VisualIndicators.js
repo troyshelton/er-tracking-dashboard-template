@@ -122,24 +122,12 @@
             badge.style.borderRadius = '12px';
             badge.style.fontFamily = 'monospace';
             badge.style.display = 'inline-block';
-            
-            // Add colored border to header for additional visibility
-            const header = document.getElementById('header');
-            if (header) {
-                header.style.borderTop = `3px solid ${borderColor}`;
-            }
 
             console.log(`[VisualIndicators] Unified indicator displayed: ${message}`);
         } else if (badge) {
             // Clear badge if no message
             badge.innerHTML = '';
             badge.style.display = 'none';
-
-            // Reset header border
-            const header = document.getElementById('header');
-            if (header) {
-                header.style.borderTop = '';
-            }
 
             console.log('[VisualIndicators] All visual indicators cleared');
         }
