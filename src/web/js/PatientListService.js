@@ -380,9 +380,13 @@
             const isSimulator = window.SIMULATOR_CONFIG?.enabled;
 
             if (isSimulator) {
-                // Use mock data in simulator mode
-                this._logDebug('Simulator mode: Using mock ER patient data');
-                return this.generateMockPatientData(trackingGroupCd);
+                // Use mock data in simulator mode with delay (to see loading message)
+                this._logDebug('Simulator mode: Using mock ER patient data with delay');
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(this.generateMockPatientData(trackingGroupCd));
+                    }, 800); // Match simulator delay for consistent UX testing
+                });
             } else {
                 // Call ER census CCL in production
                 if (typeof window.sendCclRequest === 'function') {
