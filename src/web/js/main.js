@@ -3039,6 +3039,32 @@
     }
 
     /**
+     * Show message in table (merged cell pattern)
+     */
+    function showTableMessage(message) {
+        const app = window.PatientListApp;
+
+        if (app.state.handsontableInstance) {
+            const messageData = [{
+                PATIENT_NAME: message,
+                UNIT: "", ROOM_BED: "", AGE: "", GENDER: "",
+                PATIENT_CLASS: "", ADMISSION_DATE: "", STATUS: ""
+            }];
+            app.state.handsontableInstance.updateSettings({
+                data: messageData,
+                mergeCells: [{ row: 0, col: 0, rowspan: 1, colspan: 8 }],
+                cells: function(row, col) {
+                    return {
+                        className: 'htCenter htMiddle',
+                        renderer: 'text'
+                    };
+                }
+            });
+            app.state.handsontableInstance.render();
+        }
+    }
+
+    /**
      * Clear patient table and show prompt message
      */
     function clearPatientTable() {
@@ -3269,16 +3295,12 @@
             disableRefreshButton();
         }
 
-        // Show loading state (keep table visible if it exists)
+        // Show loading message in table
         if (app.state.handsontableInstance) {
-            // Table exists: Clear data but keep structure visible
-            console.log('Clearing table data while loading...');
-            app.state.handsontableInstance.updateSettings({
-                data: [[]]  // Empty data
-            });
-            app.state.handsontableInstance.render();
+            console.log('Showing loading message in table...');
+            showTableMessage('Loading patient data...');
         } else {
-            // No table yet: Show loading message
+            // No table yet: Show loading message in container
             const container = document.getElementById('patient-table-container');
             if (container) {
                 container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Loading patient data...</p>';
@@ -3409,13 +3431,11 @@
                 statsIndicator.textContent = '';
             }
 
-            // Show loading state (keep table visible if it exists)
+            // Show loading message in table
             if (app.state.handsontableInstance) {
-                // Table exists: Clear data but keep structure visible
-                app.state.handsontableInstance.updateSettings({ data: [[]] });
-                app.state.handsontableInstance.render();
+                showTableMessage('Loading ER unit patient data...');
             } else {
-                // No table yet: Show loading message
+                // No table yet: Show loading message in container
                 const container = document.getElementById('patient-table-container');
                 if (container) {
                     container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Loading ER unit patient data...</p>';
