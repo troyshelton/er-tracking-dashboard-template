@@ -2655,7 +2655,19 @@
             app.state.handsontableInstance.updateSettings({
                 data: data,
                 height: optimalHeight,
-                maxRows: data.length
+                maxRows: data.length,
+                mergeCells: [],  // Clear any merged cells from message display
+                cells: function(row, col) {  // Restore normal cell styling
+                    const cellProperties = {};
+                    const alignment = (col <= 5) ? 'htLeft' : 'htCenter';
+
+                    if (row % 2 === 0) {
+                        cellProperties.className = `htMiddle ${alignment} even-row`;
+                    } else {
+                        cellProperties.className = `htMiddle ${alignment} odd-row`;
+                    }
+                    return cellProperties;
+                }
             });
             console.log(`Patient table updated with ${data.length} patients`);
         }
