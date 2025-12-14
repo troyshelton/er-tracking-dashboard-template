@@ -3433,6 +3433,7 @@
 
             // Show loading message in table
             if (app.state.handsontableInstance) {
+                console.log('Showing ER loading message in table...');
                 showTableMessage('Loading ER unit patient data...');
             } else {
                 // No table yet: Show loading message in container
