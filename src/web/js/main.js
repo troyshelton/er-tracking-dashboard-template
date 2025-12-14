@@ -3461,12 +3461,12 @@
                 // Display in table
                 initializePatientTable(filteredData);
             } else {
-                showMessage('No patients found for selected ER unit');
+                showTableMessage('No patients found for selected ER unit');
             }
 
         } catch (error) {
             debugLog('Error loading ER unit data: ' + error.message, 'error');
-            showMessage('Error loading ER unit data: ' + error.message);
+            showTableMessage('Error loading ER unit data. Please try again.');
         } finally {
             // Always stop refresh animation, even on error (Issue #78)
             if (refreshButton) {
