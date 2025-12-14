@@ -328,8 +328,32 @@
             }
         ];
 
-        // Filter based on list ID to simulate different lists
-        switch (parseInt(listId)) {
+        // Filter based on list ID or ER tracking group to simulate different lists
+        const listIdNum = parseInt(listId) || 0;
+
+        // ER tracking group codes (Issue #78 ER units)
+        if (listId === '271365867.00' || listId === 271365867) {
+            // General Hospital ER - Return ICU and ER patients
+            return mockPatients.filter(p => p.UNIT === 'ICU' || p.UNIT === 'ER');
+        } else if (listId === '28309431.00' || listId === 28309431) {
+            // Memorial Hospital - Return different mix (2N, 3W units)
+            return mockPatients.filter(p => p.UNIT === '2N' || p.UNIT === '3W');
+        } else if (listId === '271366149.00' || listId === 271366149) {
+            // Teays Valley - Return ER only
+            return mockPatients.filter(p => p.UNIT === 'ER');
+        } else if (listId === '271366419.00' || listId === 271366419) {
+            // Women and Children's - Return ICU only
+            return mockPatients.filter(p => p.UNIT === 'ICU');
+        } else if (listId === '8800251397.00' || listId === 8800251397) {
+            // Greenbrier - Return 2N only
+            return mockPatients.filter(p => p.UNIT === '2N');
+        } else if (listId === '9799324931.00' || listId === 9799324931) {
+            // Plateau - Return 3W only
+            return mockPatients.filter(p => p.UNIT === '3W');
+        }
+
+        // Patient list IDs
+        switch (listIdNum) {
             case 1001: // ICU Patients
                 return mockPatients.filter(p => p.UNIT === 'ICU' || p.UNIT === '3W');
             case 1002: // Emergency Department
