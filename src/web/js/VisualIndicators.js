@@ -93,30 +93,34 @@
         let message = '';
         let backgroundColor = '#333333'; // Default gray
         let borderColor = '#6b7280';
-        
+
         if (isSimulator && impersonateId) {
-            message = `🚨 SIMULATOR MODE + IMPERSONATING USER: ${impersonateId}`;
-            backgroundColor = '#ff0000'; // Red for simulator (higher priority)
-            borderColor = '#ff0000';
+            message = `SIMULATOR + USER: ${impersonateId}`;
+            backgroundColor = '#dc2626'; // Red for simulator (higher priority)
+            borderColor = '#dc2626';
         } else if (isSimulator) {
-            message = '🚨 SIMULATOR MODE - USING MOCK DATA';
-            backgroundColor = '#ff0000'; // Red
-            borderColor = '#ff0000';
+            message = 'SIMULATOR';
+            backgroundColor = '#dc2626'; // Red
+            borderColor = '#dc2626';
         } else if (impersonateId) {
-            message = `👤 IMPERSONATING USER: ${impersonateId}`;
-            backgroundColor = '#ff8c00'; // Orange
-            borderColor = '#ff8c00';
+            message = `USER: ${impersonateId}`;
+            backgroundColor = '#f59e0b'; // Orange
+            borderColor = '#f59e0b';
         }
 
         // Use header badge instead of fixed position indicator
         const badge = document.getElementById('mode-indicator-badge');
 
         if (message && badge) {
-            // Display badge in header
+            // Display badge in header (small pill style)
             badge.innerHTML = message;
             badge.style.backgroundColor = backgroundColor;
             badge.style.color = '#ffffff';
-            badge.style.border = `1px solid ${borderColor}`;
+            badge.style.fontSize = '10px';
+            badge.style.fontWeight = '600';
+            badge.style.padding = '3px 10px';
+            badge.style.borderRadius = '12px';
+            badge.style.fontFamily = 'monospace';
             badge.style.display = 'inline-block';
             
             // Add colored border to header for additional visibility
