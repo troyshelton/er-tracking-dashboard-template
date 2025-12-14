@@ -81,21 +81,19 @@
     }
 
     /**
-     * Update patient stats indicator (Issue #57 - FirstNet style)
-     * Format: WR: X  Total: Y  Sepsis: Z
+     * Update patient stats indicator
+     * Format: WR: X  Total: Y
      * Stats are DYNAMIC based on what's displayed
      */
     function updatePatientStats(allPatients, filteredPatients, filterMode) {
         const indicator = document.getElementById('patient-stats-indicator');
         if (!indicator) return;
 
-        // Calculate WR and Sepsis from FILTERED patients (what's actually displayed)
+        // Calculate stats from FILTERED patients (what's actually displayed)
         const waitingRoomInFiltered = filteredPatients.filter(p => {
             const room = p.ROOM_BED;
             return room && room.toLowerCase().includes('waiting');
         }).length;
-
-        const sepsisInFiltered = filteredPatients.filter(meetsSepsisCriteria).length;
 
         // Total = count of filtered patients
         const totalCount = filteredPatients.length;
@@ -104,11 +102,10 @@
         const statsHTML = `
             <span class="stat-item">WR: ${waitingRoomInFiltered}</span>
             <span class="stat-item">Total: ${totalCount}</span>
-            <span class="stat-item">Sepsis: ${sepsisInFiltered}</span>
         `;
 
         indicator.innerHTML = statsHTML;
-        debugLog(`Stats updated: WR: ${waitingRoomInFiltered}  Total: ${totalCount}  Sepsis: ${sepsisInFiltered} (Filter: ${filterMode})`);
+        debugLog(`Stats updated: WR: ${waitingRoomInFiltered}  Total: ${totalCount} (Filter: ${filterMode})`);
     }
 
     // Version Information (Required per CLAUDE.md standards)
