@@ -118,10 +118,11 @@
             badge.style.color = '#ffffff';
             badge.style.fontSize = '10px';
             badge.style.fontWeight = '600';
-            badge.style.padding = '3px 10px';
-            badge.style.borderRadius = '12px';
+            badge.style.padding = '2px 8px';
+            badge.style.borderRadius = '10px';
             badge.style.fontFamily = 'monospace';
             badge.style.display = 'inline-block';
+            badge.style.lineHeight = '1.2';
 
             console.log(`[VisualIndicators] Unified indicator displayed: ${message}`);
         } else if (badge) {

@@ -405,14 +405,19 @@
             console.error('Patient table container not found');
             return;
         }
-        
-        // Clear container
-        container.innerHTML = '';
-        
-        // Create table div
-        const tableDiv = document.createElement('div');
-        tableDiv.id = 'patient-table';
-        container.appendChild(tableDiv);
+
+        // Get or create table div (preserve existing to avoid disappearing table)
+        let tableDiv = document.getElementById('patient-table');
+        if (!tableDiv) {
+            // First time: Clear container and create table div
+            console.log('Creating table div for first time...');
+            container.innerHTML = '';
+            tableDiv = document.createElement('div');
+            tableDiv.id = 'patient-table';
+            container.appendChild(tableDiv);
+        } else {
+            console.log('Reusing existing table div...');
+        }
 
         // Helper Functions for Conditional Bundle Display (Issue #31, Task 7.1-7.2)
         // These determine when to show bundle icons vs blank cells
@@ -2364,16 +2369,10 @@
         { data: 'ACUITY', title: 'Acuity', width: 90, renderer: acuityRenderer }
         */
         
-        // Destroy existing instance if it exists
-        if (app.state.handsontableInstance) {
-            app.state.handsontableInstance.destroy();
-            app.state.handsontableInstance = null;
-        }
-        
         // Debug the data being passed to table
         console.log('Patient data for table:', data);
         console.log('Columns configuration:', columns);
-        
+
         // Calculate height for PowerChart container compatibility
         const rowHeight = 35; // Approximate row height in pixels
         const headerHeight = 45; // Header row height
@@ -2381,14 +2380,17 @@
         const calculatedHeight = (data.length * rowHeight) + headerHeight + padding;
         const minHeight = 300; // Minimum height for usability
         const maxHeight = Math.min(window.innerHeight - 100, 800); // PowerChart-compatible max height
-        
+
         // Use calculated height but respect PowerChart container limits
         const optimalHeight = Math.min(Math.max(calculatedHeight, minHeight), maxHeight);
-        
+
         console.log(`Handsontable height calculation: ${data.length} patients * ${rowHeight}px + ${headerHeight}px + ${padding}px = ${calculatedHeight}px (using ${optimalHeight}px - PowerChart compatible)`);
-        
-        // Initialize Handsontable with auto height and maxRows to show all patients
-        app.state.handsontableInstance = new Handsontable(tableDiv, {
+
+        // Create table once or update existing (smooth refresh pattern from mobility-demo)
+        if (!app.state.handsontableInstance) {
+            // First time: Create new Handsontable
+            console.log('Creating new Handsontable instance...');
+            app.state.handsontableInstance = new Handsontable(tableDiv, {
             data: data,
             columns: columns,
             colHeaders: true,
@@ -2436,8 +2438,8 @@
             }
         });
 
-        // PowerPlan Quick Launch POC - Click handler for PowerPlan circles (Issue #29, Task 3.3 + 4.3)
-        app.state.handsontableInstance.addHook('afterOnCellMouseDown', function(event, coords, TD) {
+            // PowerPlan Quick Launch POC - Click handler for PowerPlan circles (Issue #29, Task 3.3 + 4.3)
+            app.state.handsontableInstance.addHook('afterOnCellMouseDown', function(event, coords, TD) {
             // Only handle clicks on PowerPlan column (column 7)
             if (coords.col === 7) {
                 // Check if clicked element has clickable-action class
@@ -2501,10 +2503,10 @@
                     }
                 }
             }
-        });
+            });
 
-        // Add CSS for consistent cell alignment, compact appearance, and Clinical Leader Organizer styling
-        const style = document.createElement('style');
+            // Add CSS for consistent cell alignment (only once on table creation)
+            const style = document.createElement('style');
         style.textContent = `
             .handsontable td {
                 vertical-align: middle !important;
@@ -2641,9 +2643,22 @@
                 margin: 0 auto;
             }
         `;
-        document.head.appendChild(style);
+            document.head.appendChild(style);
 
-        console.log(`Patient table initialized with ${data.length} patients`);
+            console.log(`Patient table created with ${data.length} patients`);
+        } else {
+            // Table exists: Update data only (smooth refresh - no destroy/recreate)
+            console.log(`Updating existing Handsontable with ${data.length} patients...`);
+            app.state.handsontableInstance.updateSettings({
+                data: data,
+                height: optimalHeight,
+                maxRows: data.length
+            });
+            console.log(`Patient table updated with ${data.length} patients`);
+        }
+
+        // Always render after create or update
+        app.state.handsontableInstance.render();
     }
 
     /**
@@ -3183,16 +3198,20 @@
             disableRefreshButton();
         }
 
-        // Clear existing table and show loading message
-        const container = document.getElementById('patient-table-container');
-        if (container) {
-            container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Loading patient data...</p>';
-        }
-
-        // Destroy existing Handsontable instance
+        // Show loading state (keep table visible if it exists)
         if (app.state.handsontableInstance) {
-            app.state.handsontableInstance.destroy();
-            app.state.handsontableInstance = null;
+            // Table exists: Clear data but keep structure visible
+            console.log('Clearing table data while loading...');
+            app.state.handsontableInstance.updateSettings({
+                data: [[]]  // Empty data
+            });
+            app.state.handsontableInstance.render();
+        } else {
+            // No table yet: Show loading message
+            const container = document.getElementById('patient-table-container');
+            if (container) {
+                container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Loading patient data...</p>';
+            }
         }
 
         try {
@@ -3319,16 +3338,17 @@
                 statsIndicator.textContent = '';
             }
 
-            // Clear existing table first (Issue #78: show loading indicator)
-            const container = document.getElementById('patient-table-container');
-            if (container) {
-                container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Loading ER unit patient data...</p>';
-            }
-
-            // Destroy existing Handsontable instance
+            // Show loading state (keep table visible if it exists)
             if (app.state.handsontableInstance) {
-                app.state.handsontableInstance.destroy();
-                app.state.handsontableInstance = null;
+                // Table exists: Clear data but keep structure visible
+                app.state.handsontableInstance.updateSettings({ data: [[]] });
+                app.state.handsontableInstance.render();
+            } else {
+                // No table yet: Show loading message
+                const container = document.getElementById('patient-table-container');
+                if (container) {
+                    container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Loading ER unit patient data...</p>';
+                }
             }
 
             debugLog('Loading ER unit patients for tracking group: ' + trackingGroupCd);
@@ -3381,14 +3401,15 @@
     function showMessage(message) {
         const container = document.getElementById('patient-table-container');
         const app = window.PatientListApp;
-        
+
+        if (app.state.handsontableInstance) {
+            // Table exists: Clear data but keep visible
+            app.state.handsontableInstance.updateSettings({ data: [[]] });
+            app.state.handsontableInstance.render();
+        }
+
         if (container) {
             container.innerHTML = `<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">${message}</p>`;
-        }
-        
-        if (app.state.handsontableInstance) {
-            app.state.handsontableInstance.destroy();
-            app.state.handsontableInstance = null;
         }
     }
     
@@ -3398,14 +3419,15 @@
     function clearPatientTable() {
         const container = document.getElementById('patient-table-container');
         const app = window.PatientListApp;
-        
+
+        if (app.state.handsontableInstance) {
+            // Table exists: Clear data but keep visible
+            app.state.handsontableInstance.updateSettings({ data: [[]] });
+            app.state.handsontableInstance.render();
+        }
+
         if (container) {
             container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Select a patient list to fetch and display data</p>';
-        }
-        
-        if (app.state.handsontableInstance) {
-            app.state.handsontableInstance.destroy();
-            app.state.handsontableInstance = null;
         }
     }
 
