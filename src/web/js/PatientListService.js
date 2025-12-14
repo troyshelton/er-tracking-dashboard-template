@@ -385,7 +385,7 @@
                 return new Promise((resolve) => {
                     setTimeout(() => {
                         resolve(this.generateMockPatientData(trackingGroupCd));
-                    }, 800); // Match simulator delay for consistent UX testing
+                    }, 100); // 100ms delay (production CCL will have natural delays)
                 });
             } else {
                 // Call ER census CCL in production

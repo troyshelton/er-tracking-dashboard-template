@@ -35,7 +35,7 @@
                     }
                     reject(error);
                 }
-            }, 800); // 800ms delay to see loading messages during testing
+            }, 100); // 100ms delay (production CCL will have natural 1-3sec delays)
         });
     };
     
