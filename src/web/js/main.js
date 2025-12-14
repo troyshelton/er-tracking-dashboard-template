@@ -2992,19 +2992,54 @@
     }
 
     /**
-     * Clear patient table
+     * Initialize empty table with prompt message (mobility-demo pattern)
+     */
+    function initializeEmptyTable() {
+        const messageData = [["Select a patient list to fetch and display data"]];
+
+        // Initialize table with message
+        initializePatientTable(messageData);
+
+        // Configure for message display: merge all columns, center text
+        if (window.PatientListApp.state.handsontableInstance) {
+            window.PatientListApp.state.handsontableInstance.updateSettings({
+                mergeCells: [{ row: 0, col: 0, rowspan: 1, colspan: 8 }],  // Merge all 8 columns
+                cells: function(row, col) {
+                    return {
+                        className: 'htCenter htMiddle'  // Center the message
+                    };
+                }
+            });
+            window.PatientListApp.state.handsontableInstance.render();
+            console.log('Empty table initialized with prompt message');
+        }
+    }
+
+    /**
+     * Clear patient table and show prompt message
      */
     function clearPatientTable() {
-        const container = document.getElementById('patient-table-container');
         const app = window.PatientListApp;
-        
-        if (container) {
-            container.innerHTML = '<p id="loading-message">Select a patient list to fetch and display data</p>';
-        }
-        
+
         if (app.state.handsontableInstance) {
-            app.state.handsontableInstance.destroy();
-            app.state.handsontableInstance = null;
+            // Table exists: Show prompt message in merged cell
+            const messageData = [["Select a patient list to fetch and display data"]];
+            app.state.handsontableInstance.updateSettings({
+                data: messageData,
+                mergeCells: [{ row: 0, col: 0, rowspan: 1, colspan: 8 }],  // Merge all columns
+                cells: function(row, col) {
+                    return {
+                        className: 'htCenter htMiddle'  // Center the message
+                    };
+                }
+            });
+            app.state.handsontableInstance.render();
+        } else {
+            // No table yet: Show message in container
+            const container = document.getElementById('patient-table-container');
+            if (container) {
+                container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Select a patient list to fetch and display data</p>';
+            }
         }
     }
     
@@ -3419,20 +3454,7 @@
     /**
      * Clear patient table
      */
-    function clearPatientTable() {
-        const container = document.getElementById('patient-table-container');
-        const app = window.PatientListApp;
-
-        if (app.state.handsontableInstance) {
-            // Table exists: Clear data but keep visible
-            app.state.handsontableInstance.updateSettings({ data: [[]] });
-            app.state.handsontableInstance.render();
-        }
-
-        if (container) {
-            container.innerHTML = '<p id="loading-message" class="font-sans font-normal text-center text-slate-500 italic" style="padding: 2rem;">Select a patient list to fetch and display data</p>';
-        }
-    }
+    // REMOVED: Duplicate clearPatientTable function (using single definition above)
 
     // Expose functions to global scope for HTML onclick handlers and Config.js
     window.initializeServices = initializeServices;
