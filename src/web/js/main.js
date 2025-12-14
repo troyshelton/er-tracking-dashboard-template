@@ -3007,7 +3007,17 @@
      * Initialize empty table with prompt message (mobility-demo pattern)
      */
     function initializeEmptyTable() {
-        const messageData = [["Select a patient list to fetch and display data"]];
+        // Create message data as object to match expected structure
+        const messageData = [{
+            PATIENT_NAME: "Select a patient list to fetch and display data",
+            UNIT: "",
+            ROOM_BED: "",
+            AGE: "",
+            GENDER: "",
+            PATIENT_CLASS: "",
+            ADMISSION_DATE: "",
+            STATUS: ""
+        }];
 
         // Initialize table with message
         initializePatientTable(messageData);
@@ -3018,7 +3028,8 @@
                 mergeCells: [{ row: 0, col: 0, rowspan: 1, colspan: 8 }],  // Merge all 8 columns
                 cells: function(row, col) {
                     return {
-                        className: 'htCenter htMiddle'  // Center the message
+                        className: 'htCenter htMiddle',  // Center the message
+                        renderer: 'text'  // Use plain text renderer (not patientNameRenderer)
                     };
                 }
             });
@@ -3035,13 +3046,23 @@
 
         if (app.state.handsontableInstance) {
             // Table exists: Show prompt message in merged cell
-            const messageData = [["Select a patient list to fetch and display data"]];
+            const messageData = [{
+                PATIENT_NAME: "Select a patient list to fetch and display data",
+                UNIT: "",
+                ROOM_BED: "",
+                AGE: "",
+                GENDER: "",
+                PATIENT_CLASS: "",
+                ADMISSION_DATE: "",
+                STATUS: ""
+            }];
             app.state.handsontableInstance.updateSettings({
                 data: messageData,
                 mergeCells: [{ row: 0, col: 0, rowspan: 1, colspan: 8 }],  // Merge all columns
                 cells: function(row, col) {
                     return {
-                        className: 'htCenter htMiddle'  // Center the message
+                        className: 'htCenter htMiddle',  // Center the message
+                        renderer: 'text'  // Use plain text renderer
                     };
                 }
             });
