@@ -3044,12 +3044,18 @@
     function showTableMessage(message) {
         const app = window.PatientListApp;
 
+        console.log(`📢 showTableMessage called with: "${message}"`);
+        console.log(`📊 Table instance exists: ${!!app.state.handsontableInstance}`);
+
         if (app.state.handsontableInstance) {
             const messageData = [{
                 PATIENT_NAME: message,
                 UNIT: "", ROOM_BED: "", AGE: "", GENDER: "",
                 PATIENT_CLASS: "", ADMISSION_DATE: "", STATUS: ""
             }];
+
+            console.log(`📊 Setting table data to message:`, messageData);
+
             app.state.handsontableInstance.updateSettings({
                 data: messageData,
                 mergeCells: [{ row: 0, col: 0, rowspan: 1, colspan: 8 }],
@@ -3061,6 +3067,10 @@
                 }
             });
             app.state.handsontableInstance.render();
+
+            console.log(`✅ Table updated with message, render() called`);
+        } else {
+            console.log(`❌ No table instance - message not displayed`);
         }
     }
 
