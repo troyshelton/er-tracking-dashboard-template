@@ -274,7 +274,10 @@
             await initializeServices();
             window.PatientListApp.initialized = true;
             debugLog('Patient List MPage initialization complete');
-            
+
+            // Initialize empty table with prompt message (smooth UX from mobility-demo)
+            initializeEmptyTable();
+
             // Debug: Check if anything is auto-loading patients
             debugLog('Initialization complete - no auto-loading should happen');
         } catch (error) {
