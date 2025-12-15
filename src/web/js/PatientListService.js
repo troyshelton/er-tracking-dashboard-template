@@ -262,6 +262,8 @@
         const mockPatients = [
             {
                 PATIENT_NAME: "ZZZTEST, John Doe",
+                PERSON_ID: 88001,
+                ENCNTR_ID: 99001,
                 UNIT: "ICU",
                 ROOM_BED: "201-A",
                 PATIENT_CLASS: "Inpatient",
@@ -272,7 +274,9 @@
                 ADMISSION_DATE: "2025-09-01"
             },
             {
-                PATIENT_NAME: "ZZZTEST, Jane Smith", 
+                PATIENT_NAME: "ZZZTEST, Jane Smith",
+                PERSON_ID: 88002,
+                ENCNTR_ID: 99002,
                 UNIT: "ICU",
                 ROOM_BED: "202-B",
                 PATIENT_CLASS: "Inpatient",
@@ -284,10 +288,12 @@
             },
             {
                 PATIENT_NAME: "ZZZTEST, Robert Johnson",
+                PERSON_ID: 88003,
+                ENCNTR_ID: 99003,
                 UNIT: "3W",
                 ROOM_BED: "315-A",
                 PATIENT_CLASS: "Inpatient",
-                STATUS: "Alert", 
+                STATUS: "Alert",
                 ACUITY: "Level 2",
                 AGE: 58,
                 GENDER: "Male",
@@ -295,17 +301,21 @@
             },
             {
                 PATIENT_NAME: "ZZZTEST, Mary Williams",
+                PERSON_ID: 88004,
+                ENCNTR_ID: 99004,
                 UNIT: "2N",
                 ROOM_BED: "245-B",
                 PATIENT_CLASS: "Inpatient",
                 STATUS: "Stable",
                 ACUITY: "Level 3",
                 AGE: 43,
-                GENDER: "Female", 
+                GENDER: "Female",
                 ADMISSION_DATE: "2025-08-31"
             },
             {
                 PATIENT_NAME: "ZZZTEST, Michael Brown",
+                PERSON_ID: 88005,
+                ENCNTR_ID: 99005,
                 UNIT: "ER",
                 ROOM_BED: "ER-05",
                 PATIENT_CLASS: "Emergency",
@@ -317,7 +327,9 @@
             },
             {
                 PATIENT_NAME: "ZZZTEST, Sarah Davis",
-                UNIT: "ER", 
+                PERSON_ID: 88006,
+                ENCNTR_ID: 99006,
+                UNIT: "ER",
                 ROOM_BED: "ER-12",
                 PATIENT_CLASS: "Emergency",
                 STATUS: "Stable",
