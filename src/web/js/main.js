@@ -278,6 +278,9 @@
             // Initialize empty table with prompt message (smooth UX from mobility-demo)
             initializeEmptyTable();
 
+            // Add 'loaded' class to body to fade in UI elements (prevents flash)
+            document.body.classList.add('loaded');
+
             // Debug: Check if anything is auto-loading patients
             debugLog('Initialization complete - no auto-loading should happen');
         } catch (error) {
