@@ -54,7 +54,7 @@
   
   <script src="lib/eruda/eruda.js"></script>
   <script>
-    // Initialize Eruda with PowerChart-friendly settings
+    // Initialize Eruda with PowerChart-friendly settings (NO entry button)
     eruda.init({
       container: document.body,
       tool: ['console', 'elements', 'network', 'resources', 'info'],
@@ -64,27 +64,15 @@
         displaySize: 40,
         transparency: 0.9,
         theme: 'Material Design'
-      }
+      },
+      entryBtn: false  // CRITICAL: Prevent entry button from ever being created
     });
-    
+
     // Hide by default for end users, show only when needed
     eruda.hide();
-    
-    // Destroy the Eruda entry button entirely using official API
-    setTimeout(function() {
-      try {
-        eruda.get('entryBtn').destroy();
-        console.log('Eruda entry button destroyed via API');
-      } catch (error) {
-        console.log('API destroy failed, trying hide:', error.message);
-        try {
-          eruda.get('entryBtn').hide();
-          console.log('Eruda entry button hidden via API');
-        } catch (hideError) {
-          console.log('Both destroy and hide failed:', hideError.message);
-        }
-      }
-    }, 50);
+
+    // Entry button prevention confirmed
+    console.log('Eruda initialized without entry button');
     
     // Track Eruda visibility state manually
     var erudaVisible = false;
